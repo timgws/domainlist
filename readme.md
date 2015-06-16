@@ -2,6 +2,8 @@
 
 A quick class for managing lists of domains. Nothing special.
 
+[![Test Coverage](https://codeclimate.com/github/timgws/domainlist/badges/coverage.svg)](https://codeclimate.com/github/timgws/domainlist/coverage)
+[![Code Climate](https://codeclimate.com/github/timgws/domainlist/badges/gpa.svg)](https://codeclimate.com/github/timgws/domainlist)
 
 ## Example of adding domains
 ```php
