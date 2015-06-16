@@ -2,6 +2,8 @@
 
 namespace timgws;
 
+use timgws\DomainListException;
+
 /**
  * Class DomainList.
  *
@@ -95,5 +97,94 @@ class DomainList
     public function clear()
     {
         return $this->getAndClear();
+    }
+
+    /**
+     * Convert text from UTF-8 to a plain string...
+     *
+     * @param $string
+     * @return array
+     */
+    public function convertText($string)
+    {
+        $return = [];
+
+        try {
+            $translit = $this->translit($string);
+
+            $return[] = $translit;
+            $return[] = str_replace('-', '', $translit);
+        } catch (DomainListException $e) {
+            /**
+             * @TODO I should maybe do something with this?
+             *
+             * I don't really need it for my project. Sorry guys :)
+             */
+        }
+
+        return $return;
+    }
+
+    /**
+     * Shortcut to the `convertText` method.
+     *
+     * @param $string
+     * @return array
+     */
+    public function c($string)
+    {
+        return $this->convertText($string);
+    }
+
+    /**
+     * Remove any UTF-8 characters.
+     *
+     * @param $string
+     * @return string
+     */
+    private function iconv($string)
+    {
+        return iconv("UTF-8", "ISO-8859-1//TRANSLIT", $string);
+    }
+
+    /**
+     * Remove any UTF-8 characters.
+     *
+     * @param $string
+     * @throws DomainListException
+     * @return string
+     */
+    public function translit($string)
+    {
+        $transliterated = $this->iconv($string);
+
+        /**
+         * Domain names should be lower case.
+         *
+         * @see https://tools.ietf.org/html/rfc1035#section-2.3.3
+         */
+        $lowercase = strtolower($transliterated);
+
+        /**
+         * We only want a-z, hyphens and spaces.
+         * We need to remove duplicate spaces and hyphens.
+         *
+         * Numbers are allowed, but who wants them?
+         *
+         * @see https://tools.ietf.org/html/rfc1035#section-2.3.4
+         */
+        $string = preg_replace('|[^a-z\-\s]*|', '', $lowercase);
+        $string = preg_replace(array('|\s\s*|', '|\-\-*|'), '-', $string);
+
+        /**
+         * Make sure that a domain name starts with a letter, and ends with a letter/digit.
+         *
+         * @see https://tools.ietf.org/html/rfc1035#section-2.3.1
+         */
+        if (!preg_match('|^[a-z]([a-z0-9\-]*)[0-9a-z]$|', $string)) {
+            throw DomainListException();
+        }
+
+        return $string;
     }
 }
