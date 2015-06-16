@@ -176,7 +176,7 @@ class DomainList
          *
          * @see https://tools.ietf.org/html/rfc1035#section-2.3.4
          */
-        $string = preg_replace('|[^a-z\-\s]*|', '', $lowercase);
+        $string = preg_replace('|[^0-9a-z\-\s]*|', '', $lowercase);
         $string = preg_replace(array('|\s\s*|', '|\-\-*|'), '-', $string);
 
         /**
