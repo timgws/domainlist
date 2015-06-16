@@ -1,0 +1,17 @@
+{
+    "name": "timgws/domainlist",
+    "description": "A simple class for lists of domains",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tim Groeneveld",
+            "email": "tim@timg.ws"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "timgws\\": "src/"
+        }
+    },
+    "require": {}
+}
