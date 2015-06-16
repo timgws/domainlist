@@ -48,6 +48,7 @@ class DomainList
     /**
      * Add a domain name to the list of domains.
      *
+     * @throws DomainListException
      * @param $domain_name
      */
     public function add($domain_name)
@@ -60,7 +61,9 @@ class DomainList
             return;
         }
 
-        $this->list[] = $domain_name.$this->tld;
+        if ($this->validDomain($domain_name)) {
+            $this->list[] = $domain_name . $this->tld;
+        }
     }
 
     /**
@@ -186,5 +189,22 @@ class DomainList
         }
 
         return $string;
+    }
+
+    /**
+     * Make sure that a domain name starts with a letter, and ends with a letter/digit.
+     *
+     * @param string $string domain name
+     * @throws DomainListException
+     * @return bool if domain name is valid
+     * @see https://tools.ietf.org/html/rfc1035#section-2.3.1
+     */
+    private function validDomain($string)
+    {
+        if (!preg_match('|^[a-z]([a-z0-9\-]{1,63})?[0-9a-z]?$|', $string)) {
+            throw new DomainListException();
+        }
+
+        return true;
     }
 }
