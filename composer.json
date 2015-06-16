@@ -10,8 +10,11 @@
     ],
     "autoload": {
         "psr-4": {
-            "timgws\\": "src/"
+            "timgws\\": "src/DomainList"
         }
     },
-    "require": {}
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^4.7"
+    }
 }
