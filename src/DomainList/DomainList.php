@@ -2,8 +2,6 @@
 
 namespace timgws;
 
-use timgws\DomainListException;
-
 /**
  * Class DomainList.
  *
@@ -49,6 +47,7 @@ class DomainList
      * Add a domain name to the list of domains.
      *
      * @throws DomainListException
+     *
      * @param $domain_name
      */
     public function add($domain_name)
@@ -62,7 +61,7 @@ class DomainList
         }
 
         if ($this->validDomain($domain_name)) {
-            $this->list[] = $domain_name . $this->tld;
+            $this->list[] = $domain_name.$this->tld;
         }
     }
 
@@ -106,6 +105,7 @@ class DomainList
      * Convert text from UTF-8 to a plain string...
      *
      * @param $string
+     *
      * @return array
      */
     public function convertText($string)
@@ -118,7 +118,7 @@ class DomainList
             $return[] = $translit;
             $return[] = str_replace('-', '', $translit);
         } catch (DomainListException $e) {
-            /**
+            /*
              * @TODO I should maybe do something with this?
              *
              * I don't really need it for my project. Sorry guys :)
@@ -132,6 +132,7 @@ class DomainList
      * Shortcut to the `convertText` method.
      *
      * @param $string
+     *
      * @return array
      */
     public function c($string)
@@ -143,32 +144,35 @@ class DomainList
      * Remove any UTF-8 characters.
      *
      * @param $string
+     *
      * @return string
      */
     private function iconv($string)
     {
-        return iconv("UTF-8", "ISO-8859-1//TRANSLIT", $string);
+        return iconv('UTF-8', 'ISO-8859-1//TRANSLIT', $string);
     }
 
     /**
      * Remove any UTF-8 characters.
      *
      * @param $string
+     *
      * @throws DomainListException
+     *
      * @return string
      */
     public function translit($string)
     {
         $transliterated = $this->iconv($string);
 
-        /**
+        /*
          * Domain names should be lower case.
          *
          * @see https://tools.ietf.org/html/rfc1035#section-2.3.3
          */
         $lowercase = strtolower($transliterated);
 
-        /**
+        /*
          * We only want a-z, hyphens and spaces.
          * We need to remove duplicate spaces and hyphens.
          *
@@ -188,8 +192,11 @@ class DomainList
      * Make sure that a domain name starts with a letter, and ends with a letter/digit.
      *
      * @param string $string domain name
+     *
      * @throws DomainListException
+     *
      * @return bool if domain name is valid
+     *
      * @see https://tools.ietf.org/html/rfc1035#section-2.3.1
      */
     private function validDomain($string)
