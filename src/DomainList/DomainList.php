@@ -179,14 +179,7 @@ class DomainList
         $string = preg_replace('|[^0-9a-z\-\s]*|', '', $lowercase);
         $string = preg_replace(array('|\s\s*|', '|\-\-*|'), '-', $string);
 
-        /**
-         * Make sure that a domain name starts with a letter, and ends with a letter/digit.
-         *
-         * @see https://tools.ietf.org/html/rfc1035#section-2.3.1
-         */
-        if (!preg_match('|^[a-z]([a-z0-9\-]*)[0-9a-z]$|', $string)) {
-            throw DomainListException();
-        }
+        $this->validDomain($string);
 
         return $string;
     }
